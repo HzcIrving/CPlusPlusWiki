@@ -11,4 +11,8 @@
   
 2. AD应用 
 - 混合A*算法应用：在混合A*算法中，优先级队列用于按成本排序存储节点，以决定探索顺序，有效地找到最优路径。
-*/
+*/ 
+
+#include <iostream> 
+#include <queue> 
+#include <vector>
