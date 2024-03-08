@@ -58,6 +58,89 @@ struct TaskComparator{
     }
 };
 
+/*
+Apollo Part --- https://github.com/ApolloAuto/apollo/blob/r6.0.0/modules/planning/open_space/coarse_trajectory_generator/hybrid_a_star.cc
+
+
+// 定义一个名为 cmp 的结构体，用作自定义比较器。
+struct cmp {
+  // 重载函数调用操作符 () 以用于比较两个 std::pair<std::string, double> 类型的元素。
+  // const 关键字表示这个函数不会修改任何成员变量。
+  bool operator()(const std::pair<std::string, double>& left,
+                  const std::pair<std::string, double>& right) const {
+    // 比较两个元素的 double 值。如果 left 的 double 值大于等于 right 的 double 值，
+    // 则返回 true，否则返回 false。
+    // 这意味着优先级队列将根据 double 值的升序来排序元素，即 double 值较小的元素优先级更高。
+    return left.second >= right.second;  // 成本越低，优先级越低 
+  }
+};
+
+// 定义一个优先级队列 open_pq_，其元素为 std::pair<std::string, double> 类型。
+// 使用 std::vector 作为底层容器，并指定自定义比较器 cmp 用于元素的排序逻辑。
+std::priority_queue<std::pair<std::string, double>,
+                     std::vector<std::pair<std::string, double>>, cmp>
+    open_pq_;
+
+.... 
+
+// 继续搜索直到优先级队列为空，表明没有更多的节点可以扩展。
+while (!open_pq_.empty()) {
+  // 从优先级队列中取出当前成本最低的节点。
+  // 优先级队列保证了每次提取的都是成本最低的节点。
+  const std::string current_id = open_pq_.top().first; // 获取成本最低的节点ID。
+  open_pq_.pop(); // 从优先级队列中移除该节点。
+
+  // 通过节点ID从open_set_中获取当前节点的指针。
+  // open_set_存储的是所有待处理的节点及其信息。
+  std::shared_ptr<Node3d> current_node = open_set_[current_id];
+
+  // 尝试使用Reed-Shepp曲线直接连接当前节点到目标节点，
+  // 如果成功，则表明已找到一条路径，可以结束搜索。
+  const double rs_start_time = Clock::NowInSeconds();
+  if (AnalyticExpansion(current_node)) {
+    break; // 成功找到路径，结束循环。
+  }
+  const double rs_end_time = Clock::NowInSeconds();
+  rs_time += rs_end_time - rs_start_time; // 累计Reed-Shepp曲线扩展的时间。
+
+  // 将当前节点移入close_set_，表示该节点已被扩展，不会再被处理。
+  close_set_.emplace(current_node->GetIndex(), current_node);
+
+  // 遍历当前节点的所有可能后继节点。
+  for (size_t i = 0; i < next_node_num_; ++i) {
+    // 生成下一个节点。
+    std::shared_ptr<Node3d> next_node = Next_node_generator(current_node, i);
+    
+    // 如果节点无效或已在闭集中，则跳过该节点。
+    if (next_node == nullptr || close_set_.find(next_node->GetIndex()) != close_set_.end()) {
+      continue;
+    }
+
+    // 进行碰撞检测，验证节点是否有效。
+    if (!ValidityCheck(next_node)) {
+      continue; // 无效节点，跳过。
+    }
+
+    // 如果这是一个新节点（不在开放集中）。
+    if (open_set_.find(next_node->GetIndex()) == open_set_.end()) {
+      explored_node_num++; // 增加已探索的节点数。
+
+      // 计算从当前节点到下一个节点的成本。
+      const double start_time = Clock::NowInSeconds();
+      CalculateNodeCost(current_node, next_node);
+      const double end_time = Clock::NowInSeconds();
+      heuristic_time += end_time - start_time; // 累计启发式函数的时间。
+
+      // 将新节点添加到开放集和优先级队列中。
+      // 这保证了在后续的迭代中，成本最低的节点会首先被处理。
+      open_set_.emplace(next_node->GetIndex(), next_node);
+      open_pq_.emplace(next_node->GetIndex(), next_node->GetCost());
+    }
+  }
+}
+
+
+*/
 int main(){  
     // 1 ---------------------------------------------- 
     std::priority_queue<int, std::vector<int>, NormalMinHeapComparator> pInt; 
