@@ -54,7 +54,8 @@
     "shared_mutex": "cpp",
     "sstream": "cpp",
     "streambuf": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "queue": "cpp"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",

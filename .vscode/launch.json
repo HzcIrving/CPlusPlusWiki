@@ -29,8 +29,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "g:/CplusWorks/Application",
-      "program": "g:/CplusWorks/Application/build/Debug/outDebug",
+      "cwd": "g:/CplusWorks/ADRelated",
+      "program": "g:/CplusWorks/ADRelated/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
