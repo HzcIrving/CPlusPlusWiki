@@ -141,6 +141,8 @@ void MaxTest(){
     /*
     返回值：iterator或地址，加上解引用*即得最大最小值
     优点：当我们要求某个区间范围内的最大最小值或者最大最小值的index时, max_element和min_element直接传入这个区间的起始地址即可，会比循环max/min方便很多，尤其是数组是多维的时候。比如leetcode 120题的官方解法就用到了
+    --------------------------------------------
+    leetcode见 "../leetcode/DP/leetcode120.cpp"
     */ 
     int a[] = {1,2,3,4,5}; 
     int maxPosition = std::max_element(a, a+5) - a; // 最大值下标 左开右闭
