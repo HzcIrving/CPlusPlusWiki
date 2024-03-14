@@ -98,8 +98,6 @@ int main(){
     printArray(new_arr, 10);
     // cout << "new size:" << sizeof(new_arr)/sizeof(new_arr[0]) << endl; 
     
-
-
     // 释放
     delete[] arr1; 
     delete[] nums_test;   

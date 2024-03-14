@@ -29,8 +29,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "g:/CplusWorks/Interview",
-      "program": "g:/CplusWorks/Interview/build/Debug/outDebug",
+      "cwd": "g:/CplusWorks/DataStructure",
+      "program": "g:/CplusWorks/DataStructure/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
