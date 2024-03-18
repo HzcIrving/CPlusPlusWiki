@@ -7,7 +7,9 @@
 1. 添加或删除边：直接在邻接矩阵中修改指定的边即可，使用O(1)时间。而由于是无向图，因此需要同时更新两个方向的边。
 2. 添加顶点：在邻接矩阵的尾部添加一行一列，并全部填0即可，使用O(n)时间。
 3. 删除顶点：在邻接矩阵中删除一行一列。当删除首行首列时达到最差情况，需要将(n-1)^2个元素“向左上移动”，从而使用O(n^2)时间。
-4. 初始化：传入 n个顶点，初始化长度为n的顶点列表 vertices ，使用O(n)时间；初始化n*n大小的邻接矩阵 adjMat ，使用O(n^2)时间。
+4. 初始化：传入 n个顶点，初始化长度为n的顶点列表 vertices ，使用O(n)时间；初始化n*n大小的邻接矩阵 adjMat ，使用O(n^2)时间。 
+
+【邻接表】
 */ 
 
 #include <iostream> 
@@ -80,7 +82,7 @@ class GraphAdjMat {
         adjMat.erase(adjMat.begin() + index);
         // 在邻接矩阵中删除索引 index 的列
         for (vector<int> &row : adjMat) {
-            row.erase(row.begin() + index);
+            row.erase(row.begin() + index); // O(n^2) 这里隐含了最坏的头节点删除的情况 
         }
     }
 
