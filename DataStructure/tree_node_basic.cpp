@@ -1,6 +1,8 @@
 #include <iostream> 
 #include <queue> 
 #include <math.h> 
+#include <chrono> 
+#include <ctime>
 
 using namespace std;  
 
@@ -29,8 +31,12 @@ using namespace std;
 -  [完全二叉树 complete binary tree] 只有最底层的节点未被填满，且最底层节点尽量靠左填充。
 -  [完满二叉树 full binary tree] 除了叶节点之外，其余所有节点都有两个子节点。   
 - 「平衡二叉树 balanced binary tree」中任意节点的左子树和右子树的高度之差的绝对值不超过 1 。 
-    -- Leetcode 110: https://leetcode.cn/problems/balanced-binary-tree/ 
+    -- Leetcode 110: https://leetcode.cn/problems/balanced-binary-tree/  
 
+二叉树遍历
+    - 「层序遍历 level-order traversal」从顶部到底部逐层遍历二叉树，并在每一层按照从左到右的顺序访问节点。
+        
+    - 
 */ 
 
 /* 1. 二叉树节点结构体 */
@@ -47,8 +53,10 @@ struct TreeNode{
 
 void PrintTreeByLevel(TreeNode *root);   
 
-/* 4. 判断是否是平衡二叉树 https://leetcode.cn/problems/balanced-binary-tree/description/ 
-中任意节点的左子树和右子树的深度之差的绝对值不超过 1 
+/* 2. 判断是否是平衡二叉树 https://leetcode.cn/problems/balanced-binary-tree/description/ 
+中任意节点的左子树和右子树的深度之差的绝对值不超过 1  
+
+TODO O(N)的方法，自底向下？
 */  
 class isBalancedTreeSolve1{
     public: 
@@ -78,8 +86,80 @@ class isBalancedTreeSolve1{
             if(root == nullptr) return 0; 
             return max(depth(root->left), depth(root->right)) + 1; 
         } 
+};   
 
-};  
+
+/* 3. 二叉树遍历 ================================================================== */  
+template<typename VectorType> 
+class TreeNodeTraversal{
+    // TreeNodeTraversal(){}; 
+
+public:
+    // 层序遍历C++ template，返回vector<T> 
+    vector<VectorType> levelOrderTravelsal(TreeNode *root){ 
+        /*
+        层序遍历本质上属于「广度优先遍历 breadth-first traversal」，\
+        也称「广度优先搜索 breadth-first search, BFS」 
+
+        时间复杂度O(N)
+        空间复杂度O(N) --- 最差满二叉树 
+        */ 
+        vector<VectorType> res; 
+        // 初始化队列 
+        queue<TreeNode*> que; 
+        que.push(root); // 根节点  
+        while(!que.empty()){
+            TreeNode *node = que.front(); 
+            que.pop();  
+            res.emplace_back(node->val);  
+            if(node->left != nullptr) que.emplace(node->left); 
+            if(node->right != nullptr) que.emplace(node->right); 
+        } 
+
+        // print 
+        cout << "levelOrderTravelsal: "; 
+        for(auto &v: res) cout << v << " "; 
+        cout << endl; 
+        return res;    
+    }
+
+    /* 前序遍历 */
+    void preOrder(TreeNode *root) { 
+
+        if (root == nullptr)
+            return;
+        // 访问优先级：根节点 -> 左子树 -> 右子树
+        vec.push_back(root->val);
+        preOrder(root->left);
+        preOrder(root->right); 
+    }
+
+    /* 中序遍历 */
+    void inOrder(TreeNode *root) {
+        if (root == nullptr)
+            return;
+        // 访问优先级：左子树 -> 根节点 -> 右子树
+        inOrder(root->left);
+        vec.push_back(root->val);
+        inOrder(root->right);
+    }
+
+    /* 后序遍历 */
+    void postOrder(TreeNode *root) {
+        if (root == nullptr)
+            return;
+        // 访问优先级：左子树 -> 右子树 -> 根节点
+        postOrder(root->left);
+        postOrder(root->right);
+        vec.push_back(root->val);
+    }
+    
+
+private:
+    vector<VectorType> vec; 
+
+    
+};
 
 /* 2. 二叉树初始化 */ 
 TreeNode* TreeNodeInit(){
@@ -124,18 +204,149 @@ TreeNode* TreeNodeInit(){
     PrintTreeByLevel(n1);   
     cout << "isBalancedTree: " << isBalancedTree.isBalanced(n1) << endl; // 删除后True 
 
+    /* 5. 层序遍历 */   
+    TreeNodeTraversal<int> traversal;   
+    clock_t start = clock(); 
+    auto res_levelOrd = traversal.levelOrderTravelsal(n1);   
+    clock_t end = clock();  
+    cout << "levelOrder timeTest: " << ((double)(end - start) / CLOCKS_PER_SEC)*1000 << " /ms"<< endl;
+
+    
     return n1; 
-}   
+}
+
+/* 3. 案例分析：基于数组写一个完全二叉树表示方法 ==================================================================
+    - 完全二叉树非常适合使用数组来表示。 
+    - 回顾完全二叉树的定义，None 只出现在最底层且靠右的位置，因此所有 None 一定出现在层序遍历序列的末尾。
+功能1 
+    - 给定某节点，获取它的值、左(右)子节点、父节点
+功能2 
+    - 前序
+    - 中序
+    - 后序
+    - 层序 
+*/ 
+template <typename T> 
+class ArrayBinaryTree{
+    public: 
+        /*构造*/ 
+        ArrayBinaryTree(vector<T> arr){
+            this->_tree = arr; 
+        } 
+        
+        /*拷贝构造*/ 
+        ArrayBinaryTree(const ArrayBinaryTree &other){
+            this->_tree = other._tree; 
+        } 
+
+        /*功能1，获取索引值，左右节点*/ 
+        auto val(int index){
+            // 检测是否越界 , 抛出越界异常
+            if(index < 0 || index >= this->_size()) return INT_MAX;  
+            return this->_tree[index];  
+        }  
+
+        /*功能2， 获取index左右节点索引*/  
+        int left(int index){
+            return 2*index + 1;  
+        } 
+
+        int right(int index){
+            return 2*index + 2; 
+        } 
+
+        /* 功能3：获取索引为i的父节点的索引 */  
+        int parent(int index){
+            return (index-1)/2; 
+        }
+
+        /* 功能4：层序遍历*/ 
+        vector<T> levelOrder(){
+            vector<T> res;  
+            for(int i = 0; i<this->_tree.size(); i++){
+                if(val(i) != INT_MAX){
+                    res.push_back(val(i)); 
+                }
+            }
+
+            return res;  
+        } 
+
+        /* 功能5, DFS多种遍历，前-中-后*/ 
+        vector<T> preOrder(){
+            vector<T> res; 
+            _DFS(0, "pre", res); 
+        } 
+        vector<T> inOrder(){
+            vector<T> res;
+            _DFS(0, "in", res); 
+        } 
+        vector<T> postOrder(){
+            vector<T> res; 
+            _DFS(0, "post", res); 
+        }
+
+        void printTree(){
+            for(int i = 0; i < _size(); i++){ 
+                if(val(i) == INT_MAX){
+                    cout << "None" << " ";  
+                    continue;
+                }
+                cout << val(i) << " "; 
+            }cout << endl; 
+        }
+
+    private:  
+        vector<T> _tree;  
+
+        /*列表容量*/
+        int _size(){
+            return _tree.size(); 
+        }  
+
+        /*DFS*/
+        void _DFS(int i, string order, vector<T> &res){
+            // 为空  
+            if(val(i) == INT_MAX){
+                return; 
+            } 
+            // 前序 中-左-右
+            if(order == "pre"){
+                res.emplace_back(val(i));  
+            }  
+            _DFS(left(i), order, res); 
+            // 中序 左-中-右  
+            if(order == "in"){
+                res.emplace_back(val(i)); 
+            }
+            _DFS(right(i), order,res(i));
+            if(order == "post"){
+                // 后序 
+                res.emplace_back(val(i));
+            }
+        }       
+};
+
+
 
 
 
 
 int main(){ 
     TreeNode *root = TreeNodeInit(); 
+    
+    // 测试ArrayBinaryTree各项功能  
+    vector<int> arr = {1,2,3,4,INT_MAX,5,6}; 
+    ArrayBinaryTree<int> arrTree(arr);   
+    arrTree.printTree();
+
 
     // 释放二叉树内存 
     delete root; 
-    return 0; 
+    
+    return 0;  
+
+     
 }
 
 
