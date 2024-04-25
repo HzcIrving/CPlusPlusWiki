@@ -1,5 +1,5 @@
 # CPlusPlusWiki
-Record the bits and pieces of self-learning C++ 
+Record the bits and pieces of the Cplusplus self-learning process.  
 
 ## Application 
 C++应用中常用功能模块; 
