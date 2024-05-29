@@ -29,8 +29,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "g:/CplusWorks/CplusplusNew",
-      "program": "g:/CplusWorks/CplusplusNew/build/Debug/outDebug",
+      "cwd": "g:/CplusWorks/Leetcode/LRU",
+      "program": "g:/CplusWorks/Leetcode/LRU/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

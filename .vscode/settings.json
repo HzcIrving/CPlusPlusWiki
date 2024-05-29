@@ -56,7 +56,8 @@
     "streambuf": "cpp",
     "cinttypes": "cpp",
     "queue": "cpp",
-    "cassert": "cpp"
+    "cassert": "cpp",
+    "unordered_set": "cpp"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
