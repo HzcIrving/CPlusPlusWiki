@@ -123,7 +123,9 @@ public:
         return res;    
     }
 
-    /* 前序遍历 */
+    /* 前序遍历
+    中左右
+     */
     void preOrder(TreeNode *root) { 
 
         if (root == nullptr)
@@ -134,7 +136,8 @@ public:
         preOrder(root->right); 
     }
 
-    /* 中序遍历 */
+    /* 中序遍历
+    左中右 */
     void inOrder(TreeNode *root) {
         if (root == nullptr)
             return;

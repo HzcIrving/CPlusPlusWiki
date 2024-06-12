@@ -1,10 +1,36 @@
+/* 
+考虑一组数据，基于数组 or 二叉搜索树存储；二叉搜索树Binary Search Tree能够实现各项操作复杂度都是对数阶
+- 具有稳定且高效的性能 
+- 二叉搜索树中序遍历为有序 
+
+- 在高频添加、低频查找（数组的插入时间复杂度为O(1))数据场景下，数组比二叉搜索树的效率更高 
+------------------------------------------------------------------------------
+         | 无序数组存储  | 有序二叉搜索树存储 
+查找元素        O(n)         O(logn) 
+插入元素        O(1)         O(logn) 
+删除元素        O(n)         O(logn) 
+-------------------------------------------------------------------------------
+
+理想情况下，二叉搜索树是【平衡】的，这样可以在logn轮循环内查找任意节点
+- 然而，如果我们在二叉搜索树中不断插入和删除节点，可能导致二叉树退化成链表，此时各项操作时间复杂度退化为O(n) 
+
+---------------------------------------------------------------------------------
+
+e.g.      7
+        6
+       5
+      4
+    ... 特殊二叉搜索树
+----------------------------------------------------------------------------------
+
+*/
 #include <iostream> 
 #include <queue> 
 #include <math.h> 
 #include <chrono> 
 #include <ctime>
 
-using namespace std;   
+using namespace std;    
 
 struct TreeNode{
     int val; 
@@ -14,7 +40,15 @@ struct TreeNode{
     // 构造形式 
     TreeNode(int x):val(x), left(nullptr), right(nullptr){}
     TreeNode(): val(0), left(nullptr), right(nullptr) {} // 默认构造 
-    TreeNode(int x, TreeNode *left, TreeNode *right):val(x), left(left), right(right){}
+    TreeNode(int x, TreeNode *left, TreeNode *right):val(x), left(left), right(right){} 
+
+    // 构造重载 = 
+    TreeNode &operator=(const TreeNode &node){ 
+        val = node.val;
+        left = node.left;
+        right = node.right;
+        return *this;
+    }
 };  
 
 /* 
@@ -33,7 +67,7 @@ public:
 
     /*【operation_1】搜
     查找节点，类似于二分法，每次可以排除一半的树，循环次数最多为二叉树深度，
-    因此时间复杂度O(logN)
+    因此时间复杂度---------[O(logN)]
     */   
     TreeNode *Search(TreeNode *root, T val){
         TreeNode *cur = root; 
