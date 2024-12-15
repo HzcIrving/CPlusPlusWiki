@@ -57,7 +57,8 @@
     "cinttypes": "cpp",
     "queue": "cpp",
     "cassert": "cpp",
-    "unordered_set": "cpp"
+    "unordered_set": "cpp",
+    "list": "cpp"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
